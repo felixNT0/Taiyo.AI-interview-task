@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../libs/Redux/Stores/store";
 import LayoutContainer from "../../Components/Layout/Layout";
@@ -34,9 +34,11 @@ function ContactListPage() {
 
   const [isFilterErrorMessage, setIsFilterErrorMessage] = useState(false);
 
-  const [result, setResult] = useState<ContactTypes[]>([]);
+  const result = useRef<ContactTypes[]>([]);
 
-  const data = useMemo(() => {
+  console.log(result);
+
+  useMemo(() => {
     if (
       selectedFilterValue === ContactStatusEnum.ACTIVE ||
       selectedFilterValue === ContactStatusEnum.INACTIVE
@@ -47,12 +49,12 @@ function ContactListPage() {
           .includes(selectedFilterValue.toLowerCase())
       );
 
-      setResult(selectedContacts);
+      result.current = selectedContacts;
       if (selectedContacts.length === 0) {
         setIsFilterErrorMessage(true);
       }
     } else if (selectedFilterValue === "all") {
-      setResult(contactsData);
+      result.current = contactsData;
     } else if (searchContactsValue) {
       const searchedContacts = contactsData.filter(
         (contact) =>
@@ -63,14 +65,14 @@ function ContactListPage() {
             .toLowerCase()
             .includes(searchContactsValue.toLowerCase())
       );
-      setResult(searchedContacts);
+      result.current = searchedContacts;
       if (searchedContacts.length === 0) {
         setIsSearchErrorMessage(true);
       }
     } else {
-      setResult(contactsData);
+      result.current = contactsData;
     }
-    return result;
+    return result.current;
   }, [selectedFilterValue, searchContactsValue, contactsData]);
 
   useEffect(() => {
@@ -100,7 +102,7 @@ function ContactListPage() {
           </button>
 
           <div className="grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-8 sm:px-1  mt-[100px]">
-            {result?.map((contact: ContactTypes, index: number) => (
+            {result.current?.map((contact: ContactTypes, index: number) => (
               <ContactCard
                 key={contact.id}
                 first_name={contact.first_name}
