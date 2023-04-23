@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../libs/Redux/Stores/store";
 import LayoutContainer from "../../Components/Layout/Layout";
@@ -30,9 +30,9 @@ function ContactListPage() {
     [storedContactsData]
   );
 
-  const [isSearchErrorMessage, setIsSearchErrorMessage] = useState(false);
+  const isSearchErrorMessage = useRef(false);
 
-  const [isFilterErrorMessage, setIsFilterErrorMessage] = useState(false);
+  const isFilterErrorMessage = useRef(false);
 
   const result = useRef<ContactTypes[]>([]);
 
@@ -49,7 +49,7 @@ function ContactListPage() {
 
       result.current = selectedContacts;
       if (selectedContacts.length === 0) {
-        setIsFilterErrorMessage(true);
+        isFilterErrorMessage.current = true;
       }
     } else if (selectedFilterValue === "all") {
       result.current = contactsData;
@@ -65,7 +65,7 @@ function ContactListPage() {
       );
       result.current = searchedContacts;
       if (searchedContacts.length === 0) {
-        setIsSearchErrorMessage(true);
+        isSearchErrorMessage.current = true;
       }
     } else {
       result.current = contactsData;
@@ -75,8 +75,8 @@ function ContactListPage() {
 
   useEffect(() => {
     setTimeout(() => {
-      setIsSearchErrorMessage(false);
-      setIsFilterErrorMessage(false);
+      isSearchErrorMessage.current = false;
+      isFilterErrorMessage.current = false;
     }, 50000);
   }, [
     selectedFilterValue,
@@ -123,7 +123,8 @@ function ContactListPage() {
 
           {contactsData.length === 0 ? <NoContactLIstData /> : null}
 
-          {isSearchErrorMessage || isFilterErrorMessage ? (
+          {(isSearchErrorMessage || isFilterErrorMessage) &&
+          (selectedFilterValue || searchContactsValue) ? (
             <NoContactErrorMessage
               isFilterErrorMessage={isFilterErrorMessage}
               isSearchErrorMessage={isSearchErrorMessage}
