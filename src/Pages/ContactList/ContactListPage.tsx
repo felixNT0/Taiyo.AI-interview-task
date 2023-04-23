@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../libs/Redux/Stores/store";
 import LayoutContainer from "../../Components/Layout/Layout";
@@ -21,10 +21,16 @@ function ContactListPage() {
     selectedFilterValue,
   } = useAppContext();
 
-  const contactsData =
-    useSelector((state: RootState) => state.contacts.value) || [];
+  const storedContactsData = useSelector(
+    (state: RootState) => state.contacts.value
+  );
 
-  let isSearchErrorMessage = false;
+  const contactsData = useMemo(
+    () => storedContactsData || [],
+    [storedContactsData]
+  );
+
+  const [isSearchErrorMessage, setIsSearchErrorMessage] = useState(false);
 
   const data = useCallback(() => {
     let result: ContactTypes[] = [];
@@ -53,7 +59,7 @@ function ContactListPage() {
       );
       result = searchedContacts;
       if (result.length === 0) {
-        isSearchErrorMessage = true;
+        setIsSearchErrorMessage(true);
       }
     } else {
       result = contactsData;
