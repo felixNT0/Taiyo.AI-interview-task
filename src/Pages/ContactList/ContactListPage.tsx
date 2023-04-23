@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../libs/Redux/Stores/store";
 import LayoutContainer from "../../Components/Layout/Layout";
@@ -32,9 +32,11 @@ function ContactListPage() {
 
   const [isSearchErrorMessage, setIsSearchErrorMessage] = useState(false);
 
-  const data = useCallback(() => {
-    let result: ContactTypes[] = [];
+  const [isFilterErrorMessage, setIsFilterErrorMessage] = useState(false);
 
+  const [result, setResult] = useState<ContactTypes[]>([]);
+
+  const data = useMemo(() => {
     if (
       selectedFilterValue === ContactStatusEnum.ACTIVE ||
       selectedFilterValue === ContactStatusEnum.INACTIVE
@@ -44,9 +46,13 @@ function ContactListPage() {
           .toLowerCase()
           .includes(selectedFilterValue.toLowerCase())
       );
-      result = selectedContacts;
+
+      setResult(selectedContacts);
+      if (selectedContacts.length === 0) {
+        setIsFilterErrorMessage(true);
+      }
     } else if (selectedFilterValue === "all") {
-      result = contactsData;
+      setResult(contactsData);
     } else if (searchContactsValue) {
       const searchedContacts = contactsData.filter(
         (contact) =>
@@ -57,16 +63,27 @@ function ContactListPage() {
             .toLowerCase()
             .includes(searchContactsValue.toLowerCase())
       );
-      result = searchedContacts;
-      if (result.length === 0) {
+      setResult(searchedContacts);
+      if (searchedContacts.length === 0) {
         setIsSearchErrorMessage(true);
       }
     } else {
-      result = contactsData;
+      setResult(contactsData);
     }
-
-    return { result };
+    return result;
   }, [selectedFilterValue, searchContactsValue, contactsData]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSearchErrorMessage(false);
+      setIsFilterErrorMessage(false);
+    }, 50000);
+  }, [
+    selectedFilterValue,
+    searchContactsValue,
+    isSearchErrorMessage,
+    isFilterErrorMessage,
+  ]);
 
   return (
     <>
@@ -83,7 +100,7 @@ function ContactListPage() {
           </button>
 
           <div className="grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-8 sm:px-1  mt-[100px]">
-            {data()?.result?.map((contact: ContactTypes, index: number) => (
+            {result?.map((contact: ContactTypes, index: number) => (
               <ContactCard
                 key={contact.id}
                 first_name={contact.first_name}
@@ -106,7 +123,12 @@ function ContactListPage() {
 
           {contactsData.length === 0 ? <NoContactLIstData /> : null}
 
-          {isSearchErrorMessage ? <NoContactErrorMessage /> : null}
+          {isSearchErrorMessage || isFilterErrorMessage ? (
+            <NoContactErrorMessage
+              isFilterErrorMessage={isFilterErrorMessage}
+              isSearchErrorMessage={isSearchErrorMessage}
+            />
+          ) : null}
         </div>
       </LayoutContainer>
     </>

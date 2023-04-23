@@ -1,7 +1,11 @@
 import { useAppContext } from "../../Contexts/useAppContext";
+import { ContactStatusEnum } from "../../Enums/ContactStatusEnums";
 
-function NoContactErrorMessage() {
-  const { searchContactsValue } = useAppContext();
+function NoContactErrorMessage({
+  isFilterErrorMessage,
+  isSearchErrorMessage,
+}: any) {
+  const { searchContactsValue, selectedFilterValue } = useAppContext();
   return (
     <div className="flex justify-center items-center text-center">
       <div
@@ -20,7 +24,18 @@ function NoContactErrorMessage() {
           </div>
           <div className="text-center">
             <p className="font-bold">Sorry</p>
-            <p className="text-sm">{searchContactsValue} Not Found</p>
+            {searchContactsValue && isSearchErrorMessage && (
+              <p className="text-sm">{searchContactsValue} Not Found</p>
+            )}
+            {selectedFilterValue && isFilterErrorMessage && (
+              <p className="text-sm">
+                No{" "}
+                {selectedFilterValue === ContactStatusEnum.ACTIVE
+                  ? "Active"
+                  : "Inactive"}{" "}
+                Contact
+              </p>
+            )}
           </div>
         </div>
       </div>
