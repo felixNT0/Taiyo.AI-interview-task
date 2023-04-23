@@ -1,10 +1,10 @@
 import { AppPageEnum } from "../Enums/AppPageEnum";
 import { CrudStateEnum } from "../Enums/CrudStateEnum";
+import { NotificationEnum } from "../Enums/NotificationEnum";
 import { ContactTypes } from "./ContactTypes";
 
 export type AppContextTypes = {
   changeActiveTab: (value: AppPageEnum) => void;
-  toggleShowOtherSideBar: () => void;
   toggleModal: () => void;
   changeCrudState: (value: CrudStateEnum) => void;
   clickedContactFuntion: (value: ContactTypes) => void;
@@ -18,5 +18,4 @@ export type AppContextTypes = {
   currentTab: AppPageEnum;
   showOtherSideBar: boolean;
   modalState: boolean;
-  loading: boolean;
 };

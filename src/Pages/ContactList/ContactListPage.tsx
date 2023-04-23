@@ -1,14 +1,15 @@
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "..//libs/Redux/Stores/store";
-import LayoutContainer from "../Components/Layout/Layout";
-import Modal from "../Components/Modal/Modal";
-import NoContactLIstData from "../Components/NoContact/NoContactLIstData";
-import NoContactErrorMessage from "../Components/NoContactErrorMessage/NoContactErrorMessage";
-import { useAppContext } from "../Contexts/useAppContext";
-import { CrudStateEnum } from "../Enums/CrudStateEnum";
-import { ContactTypes } from "../types/ContactTypes";
-import ContactCard from "../Components/ContactCard/ContactCard";
+import { RootState } from "../../libs/Redux/Stores/store";
+import LayoutContainer from "../../Components/Layout/Layout";
+import Modal from "../../Components/Modal/Modal";
+import NoContactLIstData from "../../Components/NoContact/NoContactLIstData";
+import NoContactErrorMessage from "../../Components/NoContactErrorMessage/NoContactErrorMessage";
+import { useAppContext } from "../../Contexts/useAppContext";
+import { CrudStateEnum } from "../../Enums/CrudStateEnum";
+import { ContactTypes } from "../../types/ContactTypes";
+import ContactCard from "../../Components/ContactCard/ContactCard";
+import { ContactStatusEnum } from "../../Enums/ContactStatusEnums";
 
 function ContactListPage() {
   const {
@@ -20,20 +21,26 @@ function ContactListPage() {
     selectedFilterValue,
   } = useAppContext();
 
-  const contactsData = useSelector((state: RootState) => state.contacts.value);
+  const contactsData =
+    useSelector((state: RootState) => state.contacts.value) || [];
 
   let isSearchErrorMessage = false;
 
   const data = useCallback(() => {
     let result: ContactTypes[] = [];
 
-    if (selectedFilterValue) {
-      const selectedContacts = (contactsData || []).filter((contact) =>
+    if (
+      selectedFilterValue === ContactStatusEnum.ACTIVE ||
+      selectedFilterValue === ContactStatusEnum.INACTIVE
+    ) {
+      const selectedContacts = contactsData.filter((contact) =>
         contact.contact_status
           .toLowerCase()
           .includes(selectedFilterValue.toLowerCase())
       );
       result = selectedContacts;
+    } else if (selectedFilterValue === "all") {
+      result = contactsData;
     } else if (searchContactsValue) {
       const searchedContacts = contactsData.filter(
         (contact) =>
@@ -55,8 +62,6 @@ function ContactListPage() {
     return { result };
   }, [selectedFilterValue, searchContactsValue, contactsData]);
 
-
-
   return (
     <>
       <LayoutContainer>
@@ -66,12 +71,12 @@ function ContactListPage() {
               toggleModal();
               changeCrudState(CrudStateEnum.CREATE_CONTACT);
             }}
-            className="bg-blue-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-5 mt-[100px]"
+            className="bg-blue-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline max-md:mb-1 mb-5 mt-[10px]"
           >
             Create Contact
           </button>
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 sm:px-1 px-12 mt-[100px]">
+          <div className="grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-8 sm:px-1  mt-[100px]">
             {data()?.result?.map((contact: ContactTypes, index: number) => (
               <ContactCard
                 key={contact.id}

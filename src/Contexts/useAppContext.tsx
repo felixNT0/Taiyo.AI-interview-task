@@ -4,7 +4,7 @@ import { CrudStateEnum } from "../Enums/CrudStateEnum";
 import { AppContextTypes } from "../types/AppContextTypes";
 import { ContactTypes } from "../types/ContactTypes";
 
-const clickedContactVariable = {
+export const defaultContactVariable = {
   first_name: "",
   last_name: "",
   id: "",
@@ -13,7 +13,6 @@ const clickedContactVariable = {
 
 export const AppContext = createContext<AppContextTypes>({
   changeActiveTab: () => {},
-  toggleShowOtherSideBar: () => {},
   toggleModal: () => {},
   changeCrudState: () => {},
   clickedContactFuntion: () => {},
@@ -22,12 +21,11 @@ export const AppContext = createContext<AppContextTypes>({
   searchBySelectFilter: () => {},
   selectedFilterValue: "",
   searchContactsValue: "",
-  clickedContactData: clickedContactVariable,
+  clickedContactData: defaultContactVariable,
   currentTab: AppPageEnum.CONTACT_LIST_PAGE,
   crudState: CrudStateEnum.NONE,
   showOtherSideBar: false,
   modalState: false,
-  loading: false,
 });
 
 const AppContextProvider = ({ children }: any) => {
@@ -37,19 +35,14 @@ const AppContextProvider = ({ children }: any) => {
   const [searchContactsValue, setSearchContactsValue] = useState("");
   const [crudState, setCrudState] = useState<CrudStateEnum>(CrudStateEnum.NONE);
   const [clickedContactData, setClickedContactData] = useState<ContactTypes>(
-    clickedContactVariable
+    defaultContactVariable
   );
-  const [showOtherSideBar, setShowOtherSideBar] = useState<boolean>(false);
+  const [showOtherSideBar, setShowOtherSideBar] = useState<boolean>(true);
   const [modalState, setModalState] = useState<boolean>(false);
   const [selectedFilterValue, setSelectedFilterValue] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   const toggleModal = () => {
     setModalState(!modalState);
-  };
-
-  const toggleShowOtherSideBar = () => {
-    setShowOtherSideBar(!showOtherSideBar);
   };
 
   const changeActiveTab = (tab: AppPageEnum) => {
@@ -75,12 +68,12 @@ const AppContextProvider = ({ children }: any) => {
   const toggleSidebar = () => {
     const sidebar = (document.querySelector(".sidebar") as HTMLElement) || null;
     sidebar.classList.toggle("hidden");
+    setShowOtherSideBar(!showOtherSideBar);
   };
 
   return (
     <AppContext.Provider
       value={{
-        loading,
         currentTab,
         modalState,
         crudState,
@@ -95,7 +88,6 @@ const AppContextProvider = ({ children }: any) => {
         searchForContact,
         clickedContactData,
         clickedContactFuntion,
-        toggleShowOtherSideBar,
       }}
     >
       {children}

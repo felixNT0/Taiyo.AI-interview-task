@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAppContext } from "../../Contexts/useAppContext";
 import { CrudStateEnum } from "../../Enums/CrudStateEnum";
-import { deleteContact } from "../../libs/Redux/Reducers/reducer";
+import { deleteContact } from "../../libs/Redux/Reducers/contactSlice";
 import { RootState } from "../../libs/Redux/Stores/store";
 import { ContactTypes } from "../../types/ContactTypes";
 import ConfirmationModal from "../Modal/ConfirmationModal";
 import Modal from "../Modal/Modal";
 import EachContactDetails from "./EachContactDetails";
+import { toast } from "react-toastify";
 
 function ContactCard({
   first_name,
@@ -23,6 +24,7 @@ function ContactCard({
     crudState,
     clickedContactData,
   } = useAppContext();
+
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const contactData = useSelector((state: RootState) => state.contacts.value);
@@ -34,6 +36,8 @@ function ContactCard({
       (contact: ContactTypes) => contact.id !== id
     );
     dispatch(deleteContact(deletedContacts));
+
+    toast("Contact Delete Successfully");
   };
 
   return (
@@ -57,7 +61,7 @@ function ContactCard({
         isModalOpen={openDeleteModal}
         closeModal={() => setOpenDeleteModal(!openDeleteModal)}
         confirmationFn={confirmationFn}
-        modalTitle={"Confirm"}
+        modalTitle={"Are u sure u want to delete this Contact"}
       />
     </div>
   );

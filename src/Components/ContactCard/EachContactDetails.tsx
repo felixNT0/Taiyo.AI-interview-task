@@ -1,9 +1,9 @@
 import randomColor from "randomcolor";
 import { useAppContext } from "../../Contexts/useAppContext";
-import { AppPageEnum } from "../../Enums/AppPageEnum";
 import { ContactStatusEnum } from "../../Enums/ContactStatusEnums";
 import { CrudStateEnum } from "../../Enums/CrudStateEnum";
 import { ContactTypes } from "../../types/ContactTypes";
+import { useNavigate } from "react-router-dom";
 
 interface ContactDetailTypes extends ContactTypes {
   openDeleteModal: (value: any) => void;
@@ -16,12 +16,10 @@ function EachContactDetails({
   contact_index,
   openDeleteModal,
 }: ContactDetailTypes) {
-  const {
-    changeCrudState,
-    toggleModal,
-    clickedContactFuntion,
-    changeActiveTab,
-  } = useAppContext();
+  const { changeCrudState, toggleModal, clickedContactFuntion } =
+    useAppContext();
+
+  const navigate = useNavigate();
 
   return (
     <div className="bg-gray-100  py-8 px-10 text-center rounded-md shadow-sm transform -translate-y-20 sm:-translate-y-24 max-w-xs mx-auto cursor-pointer hover:shadow-lg">
@@ -32,9 +30,7 @@ function EachContactDetails({
       >
         {first_name.charAt(0)} {last_name.charAt(0)}
       </div>
-      <p className="capitalize text-xl mt-3">
-        {first_name} {last_name}
-      </p>
+      <p className="capitalize text-xl mt-3">{first_name}</p>
       <span className="flex items-center border rounded-full w-24 pr-2 justify-center mx-auto mt-2 mb-5">
         <div
           className={`${
@@ -71,7 +67,7 @@ function EachContactDetails({
       </div>
       <button
         onClick={() => {
-          changeActiveTab(AppPageEnum.CONTACT_DETAIL_PAGE);
+          navigate(`/contact-detail/${id}`);
           clickedContactFuntion({
             first_name: first_name,
             last_name: last_name,

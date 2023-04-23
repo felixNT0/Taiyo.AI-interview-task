@@ -9,7 +9,8 @@ import AppContextProvider from "./Contexts/useAppContext";
 import "./index.css";
 import { store } from "./libs/Redux/Stores/store";
 import reportWebVitals from "./reportWebVitals";
-// import AnimatedCursor from "react-animated-cursor";
+import "react-toastify/dist/ReactToastify.css";
+import PopUpNotification from "./Components/PopUpNotification/PopUpNotification";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ root.render(
         <PersistGate loading={null} persistor={persistor}>
           <AppContextProvider>
             <App />
+            <PopUpNotification />
           </AppContextProvider>
         </PersistGate>
       </QueryClientProvider>

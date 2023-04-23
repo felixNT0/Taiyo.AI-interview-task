@@ -1,11 +1,24 @@
 import "./App.css";
-import { useAppContext } from "./Contexts/useAppContext";
-import { PageRoutes } from "./router/PageRoutes";
+import GraphChartAndMapPage from "./Pages/ChartAndMap/ChartAndMapPage";
+import ContactDetailPage from "./Pages/ContactDetail/ContactDetailPage";
+import ContactListPage from "./Pages/ContactList/ContactListPage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AllPageRoutesType } from "./types/AppPageRoutesType";
+
+const AllPageRoutes: AllPageRoutesType[] = [
+  { path: "/", element: <ContactListPage />, id: 1 },
+  { path: "/contact-detail/:contactId", element: <ContactDetailPage />, id: 2 },
+  { path: "/graph-and-map", element: <GraphChartAndMapPage />, id: 3 },
+];
+
+const router = createBrowserRouter(AllPageRoutes as any);
 
 function App() {
-  const { currentTab } = useAppContext();
-  let Pages = PageRoutes(currentTab).Components;
-  return <Pages />;
+  return (
+    <div className="App">
+      <RouterProvider router={router} />
+    </div>
+  );
 }
 
 export default App;

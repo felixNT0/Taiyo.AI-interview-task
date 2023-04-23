@@ -8,8 +8,8 @@ import {
   REHYDRATE,
   persistReducer,
 } from "redux-persist";
-import storage from 'redux-persist/lib/storage'
-import counterReducer from "../Reducers/reducer";
+import storage from "redux-persist/lib/storage";
+import counterReducer from "../Reducers/contactSlice";
 
 const persistConfig = {
   key: "root",
