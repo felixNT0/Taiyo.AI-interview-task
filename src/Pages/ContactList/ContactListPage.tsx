@@ -36,8 +36,6 @@ function ContactListPage() {
 
   const result = useRef<ContactTypes[]>([]);
 
-  console.log(result);
-
   useMemo(() => {
     if (
       selectedFilterValue === ContactStatusEnum.ACTIVE ||
