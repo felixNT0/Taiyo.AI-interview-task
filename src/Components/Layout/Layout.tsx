@@ -13,7 +13,7 @@ function LayoutContainer({ children }: any) {
         <div
           className={`${
             showOtherSideBar
-              ? "w-[320px] max-sm:fixed top-0 left-0 z-[1001] h-screen"
+              ? "w-[320px] max-[900px]:fixed top-0 left-0 z-[1001] h-screen"
               : ""
           } `}
         >

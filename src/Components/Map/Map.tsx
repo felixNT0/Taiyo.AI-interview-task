@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Icon, LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import {
   QUERY_KEY_DATA_BY_COUNTRY,
   fetchDataByCountry,
@@ -38,40 +38,38 @@ function CovidMap() {
       />
 
       {data?.map((map: any) => (
-        <div>
-          <Marker
-            key={map.countryInfo._id}
-            position={[map?.countryInfo?.lat, map?.countryInfo.long]}
-            icon={icon}
-          >
-            <Popup position={[map?.countryInfo?.lat, map?.countryInfo?.long]}>
-              <div className="w-[200px] text-center">
-                <div className="flex justify-center items-center">
-                  <img
-                    className="w-10 h-10 p-1 rounded-full "
-                    src={map?.countryInfo?.flag}
-                    alt="Country Flag"
-                  />
-                </div>
-                <p>
-                  Country Name: <span>{map?.country}</span>
-                </p>
-                <p>
-                  Population: <span>{map?.population}</span>
-                </p>
-                <p>
-                  Number Of Actives: <span>{map?.active}</span>
-                </p>
-                <p>
-                  Number Of Deaths: <span>{map?.deaths}</span>
-                </p>
-                <p>
-                  Number Of Recovered: <span>{map?.recovered}</span>
-                </p>
+        <Marker
+          key={map.countryInfo._id}
+          position={[map?.countryInfo?.lat, map?.countryInfo.long]}
+          icon={icon}
+        >
+          <Popup position={[map?.countryInfo?.lat, map?.countryInfo?.long]}>
+            <div className="w-[200px] text-center">
+              <div className="flex justify-center items-center">
+                <img
+                  className="w-10 h-10 p-1 rounded-full "
+                  src={map?.countryInfo?.flag}
+                  alt="Country Flag"
+                />
               </div>
-            </Popup>
-          </Marker>
-        </div>
+              <p>
+                Country Name: <span>{map?.country}</span>
+              </p>
+              <p>
+                Population: <span>{map?.population}</span>
+              </p>
+              <p>
+                Number Of Actives: <span>{map?.active}</span>
+              </p>
+              <p>
+                Number Of Deaths: <span>{map?.deaths}</span>
+              </p>
+              <p>
+                Number Of Recovered: <span>{map?.recovered}</span>
+              </p>
+            </div>
+          </Popup>
+        </Marker>
       ))}
     </MapContainer>
   );

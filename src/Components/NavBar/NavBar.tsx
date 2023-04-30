@@ -1,10 +1,15 @@
+import { useLocation, useParams } from "react-router-dom";
 import { useAppContext } from "../../Contexts/useAppContext";
 import { AllAppPages } from "../../util/AllAppPages";
 
 //App Navigation Bar
 
 function NavBar() {
-  const { currentTab, toggleSidebar, showOtherSideBar } = useAppContext();
+  const { toggleSidebar, showOtherSideBar } = useAppContext();
+
+  const { contactId } = useParams();
+
+  const { pathname } = useLocation();
 
   return (
     <div
@@ -21,15 +26,11 @@ function NavBar() {
         )}
       </div>
       <div>
-        <h1
-          className="text-5xl max-sm:text-[30px] ml-2 cursor-pointer "
-          // onClick={toggleShowOtherSideBar}
-        >
-          {AllAppPages(currentTab).page_name}
+        <h1 className="text-5xl max-sm:text-[30px] ml-2 cursor-pointer ">
+          {AllAppPages(pathname, contactId || "").page_name}
         </h1>
       </div>
     </div>
   );
 }
-
 export default NavBar;

@@ -1,15 +1,14 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../libs/Redux/Stores/store";
+import ContactCard from "../../Components/ContactCard/ContactCard";
 import LayoutContainer from "../../Components/Layout/Layout";
 import Modal from "../../Components/Modal/Modal";
 import NoContactLIstData from "../../Components/NoContact/NoContactLIstData";
-import NoContactErrorMessage from "../../Components/NoContactErrorMessage/NoContactErrorMessage";
 import { useAppContext } from "../../Contexts/useAppContext";
-import { CrudStateEnum } from "../../Enums/CrudStateEnum";
-import { ContactTypes } from "../../types/ContactTypes";
-import ContactCard from "../../Components/ContactCard/ContactCard";
 import { ContactStatusEnum } from "../../Enums/ContactStatusEnums";
+import { CrudStateEnum } from "../../Enums/CrudStateEnum";
+import { RootState } from "../../libs/Redux/Stores/store";
+import { ContactTypes } from "../../types/ContactTypes";
 
 function ContactListPage() {
   const {
@@ -48,8 +47,10 @@ function ContactListPage() {
       );
 
       result.current = selectedContacts;
-      if (selectedContacts.length === 0) {
+      if (selectedContacts.length === 0 && selectedFilterValue) {
         isFilterErrorMessage.current = true;
+      } else {
+        isFilterErrorMessage.current = false;
       }
     } else if (selectedFilterValue === "all") {
       result.current = contactsData;
@@ -77,7 +78,7 @@ function ContactListPage() {
     setTimeout(() => {
       isSearchErrorMessage.current = false;
       isFilterErrorMessage.current = false;
-    }, 50000);
+    }, 1000);
   }, [
     selectedFilterValue,
     searchContactsValue,
@@ -122,14 +123,6 @@ function ContactListPage() {
           ) : null}
 
           {contactsData.length === 0 ? <NoContactLIstData /> : null}
-
-          {(isSearchErrorMessage || isFilterErrorMessage) &&
-          (selectedFilterValue || searchContactsValue) ? (
-            <NoContactErrorMessage
-              isFilterErrorMessage={isFilterErrorMessage}
-              isSearchErrorMessage={isSearchErrorMessage}
-            />
-          ) : null}
         </div>
       </LayoutContainer>
     </>

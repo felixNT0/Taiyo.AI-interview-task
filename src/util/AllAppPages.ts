@@ -1,17 +1,15 @@
-import { AppPageEnum } from "../Enums/AppPageEnum";
-
-export const AllAppPages = (currentTab: AppPageEnum) => {
+export const AllAppPages = (pathname: string, id: string) => {
   let page_name: string = "";
-  switch (currentTab) {
-    case AppPageEnum.CONTACT_LIST_PAGE:
+  switch (pathname) {
+    case "/":
       page_name = "Contacts Page";
       break;
 
-    case AppPageEnum.CONTACT_DETAIL_PAGE:
+    case `/contact-detail/${id}`:
       page_name = "Contacts Detail Page";
       break;
 
-    case AppPageEnum.CHART_AND_MAP_PAGE:
+    case "/graph-and-map":
       page_name = "Map and Charts Page";
       break;
 

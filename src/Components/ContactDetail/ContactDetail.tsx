@@ -1,19 +1,19 @@
+import randomColor from "randomcolor";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   defaultContactVariable,
   useAppContext,
 } from "../../Contexts/useAppContext";
 import { ContactStatusEnum } from "../../Enums/ContactStatusEnums";
 import { CrudStateEnum } from "../../Enums/CrudStateEnum";
+import { deleteContact } from "../../libs/Redux/Reducers/contactSlice";
+import { RootState } from "../../libs/Redux/Stores/store";
+import { ContactTypes } from "../../types/ContactTypes";
 import ConfirmationModal from "../Modal/ConfirmationModal";
 import Modal from "../Modal/Modal";
-import { RootState } from "../../libs/Redux/Stores/store";
-import { useSelector, useDispatch } from "react-redux";
-import { deleteContact } from "../../libs/Redux/Reducers/contactSlice";
-import { ContactTypes } from "../../types/ContactTypes";
-import randomColor from "randomcolor";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 
 function ContactDetail() {
   const { changeCrudState, toggleModal, modalState, crudState } =

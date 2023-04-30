@@ -1,9 +1,9 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   defaultContactVariable,
   useAppContext,
 } from "../../Contexts/useAppContext";
 import { ContactStatusEnum } from "../../Enums/ContactStatusEnums";
-import { useLocation, useNavigate } from "react-router-dom";
 
 //App Side Bar
 

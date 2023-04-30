@@ -4,7 +4,7 @@ import { ContactStatusEnum } from "../../Enums/ContactStatusEnums";
 function NoContactErrorMessage({
   isFilterErrorMessage,
   isSearchErrorMessage,
-}: any) {
+}: any | undefined) {
   const { searchContactsValue, selectedFilterValue } = useAppContext();
   return (
     <div className="flex justify-center items-center text-center">
